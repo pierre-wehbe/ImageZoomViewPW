@@ -25,7 +25,8 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-A customizable ImageView with zooming enabled and zooming region bounded
+A customizable ImageView designed as a scrollView with zooming and rotation enabled and zooming region preview.
+It can be instanciated programatically or directly from the storyboard.
                    DESC
 
   s.homepage     = "https://github.com/pierre-wehbe/ImageZoomViewPW"
@@ -65,7 +66,7 @@ A customizable ImageView with zooming enabled and zooming region bounded
   #
 
   # s.platform     = :ios
-  # s.platform     = :ios, "12.0"
+  s.platform     = :ios, "12.0"
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
@@ -91,7 +92,7 @@ A customizable ImageView with zooming enabled and zooming region bounded
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "./ImageZoomViewPW/ImageZoomViewPW.swift"
+  s.source_files  = "ImageZoomViewPW"
   #s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"

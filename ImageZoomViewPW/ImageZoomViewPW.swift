@@ -14,10 +14,10 @@ import UIKit
 
 @IBDesignable
 public class ZoomViewPW: UIScrollView {
-    
+
     // MARK: Private Attributes
     static private let DefaultBoxSize: CGFloat = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 5.0
-    
+
     private var image: UIImage! {
         get {
             return imageView.image
@@ -48,7 +48,7 @@ public class ZoomViewPW: UIScrollView {
     private var _mode: Mode = .fit
     private var _position: Position = .bottomLeft
     private var previewView: UIImageView!
-    
+
     // MARK: IBInspectable Attributes
     @IBInspectable public var boundingBoxColor: UIColor = .red
     @IBInspectable public var boundingBoxBorderWidth: CGFloat = 2.0
@@ -60,7 +60,7 @@ public class ZoomViewPW: UIScrollView {
     @IBInspectable public var xMargin: CGFloat = 10.0
     @IBInspectable public var yMargin: CGFloat = 10.0
     @IBInspectable public var zoomScaleIncrement: CGFloat = 1.0
-    
+
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shape' instead.")
     @IBInspectable var mode: String? {
         willSet {
@@ -69,7 +69,7 @@ public class ZoomViewPW: UIScrollView {
             }
         }
     }
-    
+
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shape' instead.")
     @IBInspectable var position: String? {
         willSet {
@@ -78,43 +78,43 @@ public class ZoomViewPW: UIScrollView {
             }
         }
     }
-    
+
     // MARK: Constraints
     private var imageLeadingConstraint: NSLayoutConstraint!
     private var imageBottomConstraint: NSLayoutConstraint!
     private var imageTopConstraint: NSLayoutConstraint!
     private var imageTrailingConstraint: NSLayoutConstraint!
-    
+
     // MARK: Enums
     public enum Mode: String {
         case fit
         case fill
     }
-    
+
     public enum Position: String {
         case topLeft
         case bottomLeft
         case topRight
         case bottomRight
     }
-    
+
     // MARK: Initializers
     public init(frame: CGRect, image: UIImage) {
         super.init(frame: frame)
         setup()
         self.image = image
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
-    
+
     private func setup() {
         delegate = self
         bounces = false
@@ -125,11 +125,11 @@ public class ZoomViewPW: UIScrollView {
         doubleTapGesture.numberOfTapsRequired = numberOfTapsForResetZoom
         addGestureRecognizer(doubleTapGesture)
     }
-    
+
     @objc private func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         resetImage()
     }
-    
+
     // MARK: Actions
     public func zoomIn() -> Bool {
         currentScale = self.zoomScale + zoomScaleIncrement
@@ -137,22 +137,22 @@ public class ZoomViewPW: UIScrollView {
         self.setZoomScale(currentScale, animated: true)
         return currentScale + zoomScaleIncrement <= self.maximumZoomScale
     }
-    
+
     public func zoomOut() -> Bool {
         currentScale = self.zoomScale - zoomScaleIncrement
         currentScale = currentScale < self.minimumZoomScale ? self.minimumZoomScale : currentScale
         self.setZoomScale(currentScale, animated: true)
         return currentScale - zoomScaleIncrement >= self.minimumZoomScale
     }
-    
+
     public func resetImage() {
         self.image = imageView.image
     }
-    
+
     public func rotate() {
         image = imageRotatedByDegrees(oldImage: image, deg: rotationIncrementInDegree)
     }
-    
+
     public func setImage(_ image: UIImage) {
         self.image = image
     }
@@ -160,16 +160,16 @@ public class ZoomViewPW: UIScrollView {
 
 // MARK: UIScroll Delegate
 extension ZoomViewPW: UIScrollViewDelegate {
-    
+
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.imageView
     }
-    
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updatePreviewImagePosition(scrollView.contentOffset)
         updateBoundingBox()
     }
-    
+
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraintsForSize(scrollView.bounds.size)
         scrollView.contentSize = imageView.frame.size
@@ -179,7 +179,7 @@ extension ZoomViewPW: UIScrollViewDelegate {
 
 // MARK: Helper Functions
 extension ZoomViewPW {
-    
+
     private func initConstraints() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageLeadingConstraint = NSLayoutConstraint(item: imageView,
@@ -212,7 +212,7 @@ extension ZoomViewPW {
                                                      constant: 0)
         self.addConstraints([imageLeadingConstraint, imageTopConstraint, imageBottomConstraint, imageTrailingConstraint])
     }
-    
+
     private func getOriginX(previewWidth: CGFloat) -> CGFloat { //TODO: make overwritable (open)
         switch _position {
         case .bottomLeft: fallthrough
@@ -223,7 +223,7 @@ extension ZoomViewPW {
             return self.bounds.maxX - xMargin - previewWidth
         }
     }
-    
+
     private func getOriginY(previewHeight: CGFloat) -> CGFloat { //TODO: make overwritable (open)
         switch _position {
         case .topRight: fallthrough
@@ -234,12 +234,12 @@ extension ZoomViewPW {
             return self.bounds.maxY - yMargin - previewHeight
         }
     }
-    
+
     private func setupPreviewImage(_ image: UIImage) {
         if previewView != nil {
             previewView.removeFromSuperview()
         }
-        
+
         previewView = UIImageView(frame: CGRect(x: getOriginX(previewWidth: previewBoxSize.width),
                                                 y: getOriginY(previewHeight: previewBoxSize.height),
                                                 width: previewBoxSize.width,
@@ -255,7 +255,7 @@ extension ZoomViewPW {
         updateBoundingBox()
         self.scrollViewDidZoom(self)
     }
-    
+
     private func updateBoundingBox() {
         let boundingRect = previewView.subviews[0]
         guard let _ = previewView.image else {
@@ -267,37 +267,37 @@ extension ZoomViewPW {
         let previewImageHeightScale = previewViewSize.height / imageDefaultSize.height
         let previewImageWidthScale = previewViewSize.width / imageDefaultSize.width
         let previewImageScale = min(previewImageHeightScale, previewImageWidthScale)
-        
+
         let defaultPreviewImageSize = CGSize(width: imageDefaultSize.width * previewImageScale, height: imageDefaultSize.height * previewImageScale)
-        
+
         var widthScale = imageDefaultSize.width / self.bounds.width
         var heightScale = imageDefaultSize.height / self.bounds.height
         widthScale = widthScale <= 1.0 ? 1.0 : widthScale
         heightScale = heightScale <= 1.0 ? 1.0 : heightScale
-        
+
         let newWidth: CGFloat = defaultPreviewImageSize.width / widthScale
         let newHeight: CGFloat = defaultPreviewImageSize.height / heightScale
-        
+
         let updatedZoomedImageSize = CGSize(width: newWidth, height: newHeight)
-        
+
         let xInitOffset = (previewViewSize.width - defaultPreviewImageSize.width) / 2.0
         let yInitOffset = (previewViewSize.height - defaultPreviewImageSize.height) / 2.0
         let xOffset = xInitOffset + self.contentOffset.x * defaultPreviewImageSize.width / imageDefaultSize.width
         let yOffset = yInitOffset + self.contentOffset.y * defaultPreviewImageSize.height / imageDefaultSize.height
-        
+
         boundingRect.frame = CGRect(origin: CGPoint(x: xOffset, y: yOffset), size: updatedZoomedImageSize)
     }
-    
+
     private func updateMinZoomScaleForSize(_ size: CGSize) {
-        
+
         let originalImageWidth = imageView.frame.width
         let originalImageHeight = imageView.frame.height
-        
+
         let widthScale = size.width / originalImageWidth
         let heightScale = size.height / originalImageHeight
-        
+
         var minScale: CGFloat = 1.0
-        
+
         if originalImageWidth > size.width && originalImageHeight > size.height {
             minScale = min(widthScale, heightScale)
         } else if originalImageWidth > size.width && originalImageHeight <= size.height {
@@ -307,12 +307,12 @@ extension ZoomViewPW {
         } else {
             minScale = _mode == .fit ? 1.0 : min(widthScale, heightScale)
         }
-        
+
         self.minimumZoomScale = minScale
         self.maximumZoomScale = minScale + numberOfZoomInClicksAllowed
         self.setZoomScale(minScale, animated: false) // set initial zoom
     }
-    
+
     private func updateConstraintsForSize(_ size: CGSize) {
         print(imageView.frame.size)
         let yOffset = max(0, (size.height - imageView.frame.height) / 2)
@@ -325,7 +325,7 @@ extension ZoomViewPW {
         
         self.layoutIfNeeded()
     }
-    
+
     private func updatePreviewImagePosition(_ offset: CGPoint) {
         switch _position {
         case .bottomLeft:
@@ -346,24 +346,24 @@ extension ZoomViewPW {
             return
         }
     }
-    
+
     private func imageRotatedByDegrees(oldImage: UIImage, deg degrees: CGFloat) -> UIImage {
         //Calculate the size of the rotated view's containing box for our drawing space
         let rotatedViewBox: UIView = UIView(frame: CGRect(x:0, y:0, width: oldImage.size.width, height: oldImage.size.height))
-        let transform: CGAffineTransform = CGAffineTransform(rotationAngle: degrees * CGFloat(M_PI / 180))
+        let transform: CGAffineTransform = CGAffineTransform(rotationAngle: degrees * CGFloat.pi / 180)
         rotatedViewBox.transform = transform
         let rotatedSize: CGSize = rotatedViewBox.frame.size
-        
+
         //Create the bitmap context
         UIGraphicsBeginImageContext(rotatedSize)
         let bitmap: CGContext = UIGraphicsGetCurrentContext()!
-        
+
         //Move the origin to the middle of the image so we will rotate and scale around the center.
         bitmap.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
-        
+
         //Rotate the image context
-        bitmap.rotate(by: (degrees * CGFloat(M_PI / 180)))
-        
+        bitmap.rotate(by: (degrees * CGFloat.pi / 180))
+
         //Now, draw the rotated/scaled image into the context
         bitmap.scaleBy(x: 1.0, y: -1.0) //TODO: Check orientation for the image
         bitmap.draw(oldImage.cgImage!, in: CGRect(x:-oldImage.size.width / 2,
