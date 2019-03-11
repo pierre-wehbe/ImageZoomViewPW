@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		8F53E38122362F010027C10F /* ImageZoomViewPW.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F53E37F22362F010027C10F /* ImageZoomViewPW.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8F53E38822362F3D0027C10F /* ImageZoomViewPW.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F53E38722362F3D0027C10F /* ImageZoomViewPW.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8F53E37C22362F000027C10F /* ImageZoomViewPW.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ImageZoomViewPW.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F53E37F22362F010027C10F /* ImageZoomViewPW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageZoomViewPW.h; sourceTree = "<group>"; };
 		8F53E38022362F010027C10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8F53E38722362F3D0027C10F /* ImageZoomViewPW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageZoomViewPW.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +50,7 @@
 			children = (
 				8F53E37F22362F010027C10F /* ImageZoomViewPW.h */,
 				8F53E38022362F010027C10F /* Info.plist */,
+				8F53E38722362F3D0027C10F /* ImageZoomViewPW.swift */,
 			);
 			path = ImageZoomViewPW;
 			sourceTree = "<group>";
@@ -95,6 +98,7 @@
 				TargetAttributes = {
 					8F53E37B22362F000027C10F = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -130,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F53E38822362F3D0027C10F /* ImageZoomViewPW.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +266,7 @@
 		8F53E38522362F010027C10F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -278,6 +284,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = PIERRE.ImageZoomViewPW;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -286,6 +293,7 @@
 		8F53E38622362F010027C10F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
