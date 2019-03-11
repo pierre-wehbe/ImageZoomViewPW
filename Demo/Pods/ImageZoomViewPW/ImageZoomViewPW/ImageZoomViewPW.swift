@@ -11,9 +11,6 @@ import UIKit
 
 //TODO: Write Documentation
 //TODO: Check UIGestureRotation Reoginizer
-//TODO: When a property is set such as size, I need to refresh the UI (call reset image should do the job)
-//TODO: IBInspectable autorefresh, and add image life
-//TODO: Default background color = clear
 
 @IBDesignable
 public class ZoomViewPW: UIScrollView {
@@ -64,7 +61,7 @@ public class ZoomViewPW: UIScrollView {
     @IBInspectable public var yMargin: CGFloat = 10.0
     @IBInspectable public var zoomScaleIncrement: CGFloat = 1.0
 
-    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'mode' instead.")
+    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shape' instead.")
     @IBInspectable var mode: String? {
         willSet {
             if let newMode = Mode(rawValue: newValue?.lowercased() ?? "") {
@@ -73,7 +70,7 @@ public class ZoomViewPW: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'position' instead.")
+    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shape' instead.")
     @IBInspectable var position: String? {
         willSet {
             if let newPosition = Position(rawValue: newValue?.lowercased() ?? "") {
@@ -90,15 +87,15 @@ public class ZoomViewPW: UIScrollView {
 
     // MARK: Enums
     public enum Mode: String {
-        case fit = "fit"
-        case fill = "fill"
+        case fit
+        case fill
     }
 
     public enum Position: String {
-        case topLeft = "topLeft"
-        case bottomLeft = "bottomLeft"
-        case topRight = "topRight"
-        case bottomRight = "bottomRight"
+        case topLeft
+        case bottomLeft
+        case topRight
+        case bottomRight
     }
 
     // MARK: Initializers
@@ -317,6 +314,7 @@ extension ZoomViewPW {
     }
 
     private func updateConstraintsForSize(_ size: CGSize) {
+        print(imageView.frame.size)
         let yOffset = max(0, (size.height - imageView.frame.height) / 2)
         imageTopConstraint.constant = yOffset
         imageBottomConstraint.constant = yOffset

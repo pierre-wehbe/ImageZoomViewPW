@@ -1,0 +1,22 @@
+PODS:
+  - ImageZoomViewPW (1.0.0)
+
+DEPENDENCIES:
+  - ImageZoomViewPW (from `https://github.com/pierre-wehbe/ImageZoomViewPW.git`, tag `1.0.0`)
+
+EXTERNAL SOURCES:
+  ImageZoomViewPW:
+    :git: https://github.com/pierre-wehbe/ImageZoomViewPW.git
+    :tag: 1.0.0
+
+CHECKOUT OPTIONS:
+  ImageZoomViewPW:
+    :git: https://github.com/pierre-wehbe/ImageZoomViewPW.git
+    :tag: 1.0.0
+
+SPEC CHECKSUMS:
+  ImageZoomViewPW: 34a17a006a171faa73d32ccf0a91c755c9160737
+
+PODFILE CHECKSUM: 967187385238b434b0c595b36dfc86c231db7d21
+
+COCOAPODS: 1.5.3

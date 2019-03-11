@@ -1,0 +1,20 @@
+{
+  "name": "ImageZoomViewPW",
+  "version": "1.0.0",
+  "summary": "A customizable ImageView with zooming enabled and zooming region bounded",
+  "description": "A customizable ImageView designed as a scrollView with zooming and rotation enabled and zooming region preview.\nIt can be instanciated programatically or directly from the storyboard.",
+  "homepage": "https://github.com/pierre-wehbe/ImageZoomViewPW",
+  "license": "MIT",
+  "authors": {
+    "Pierro": "pew01@mail.aub.edu"
+  },
+  "platforms": {
+    "ios": "12.0"
+  },
+  "source": {
+    "git": "https://github.com/pierre-wehbe/ImageZoomViewPW.git",
+    "tag": "1.0.0"
+  },
+  "source_files": "ImageZoomViewPW",
+  "swift_version": "4.2"
+}

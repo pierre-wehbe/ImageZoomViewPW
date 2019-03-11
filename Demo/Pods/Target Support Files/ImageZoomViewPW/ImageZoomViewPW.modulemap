@@ -1,0 +1,6 @@
+framework module ImageZoomViewPW {
+  umbrella header "ImageZoomViewPW-umbrella.h"
+
+  export *
+  module * { export * }
+}
