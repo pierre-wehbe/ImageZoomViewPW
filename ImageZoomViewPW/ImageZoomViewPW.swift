@@ -61,7 +61,7 @@ public class ZoomViewPW: UIScrollView {
     @IBInspectable public var yMargin: CGFloat = 10.0
     @IBInspectable public var zoomScaleIncrement: CGFloat = 1.0
 
-    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shape' instead.")
+    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'mode' instead.")
     @IBInspectable var mode: String? {
         willSet {
             if let newMode = Mode(rawValue: newValue?.lowercased() ?? "") {
@@ -70,7 +70,7 @@ public class ZoomViewPW: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'shape' instead.")
+    @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'position' instead.")
     @IBInspectable var position: String? {
         willSet {
             if let newPosition = Position(rawValue: newValue?.lowercased() ?? "") {
@@ -87,15 +87,15 @@ public class ZoomViewPW: UIScrollView {
 
     // MARK: Enums
     public enum Mode: String {
-        case fit
-        case fill
+        case fit = "fit"
+        case fill = "fill"
     }
 
     public enum Position: String {
-        case topLeft
-        case bottomLeft
-        case topRight
-        case bottomRight
+        case topLeft = "topLeft"
+        case bottomLeft = "bottomLeft"
+        case topRight = "topRight"
+        case bottomRight = "bottomRight"
     }
 
     // MARK: Initializers
@@ -314,7 +314,6 @@ extension ZoomViewPW {
     }
 
     private func updateConstraintsForSize(_ size: CGSize) {
-        print(imageView.frame.size)
         let yOffset = max(0, (size.height - imageView.frame.height) / 2)
         imageTopConstraint.constant = yOffset
         imageBottomConstraint.constant = yOffset
