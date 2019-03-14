@@ -6,6 +6,6 @@ target 'ZoomPreviewDemo' do
   use_frameworks!
 
   # Pods for ZoomPreviewDemo
-  pod 'ImageZoomViewPW', :git => 'https://github.com/pierre-wehbe/ImageZoomViewPW.git', :tag => '1.0.0'
+  pod 'ImageZoomViewPW', :git => 'https://github.com/pierre-wehbe/ImageZoomViewPW.git', :tag => '1.0.3'
 
 end
