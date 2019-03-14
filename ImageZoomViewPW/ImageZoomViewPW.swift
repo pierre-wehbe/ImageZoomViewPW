@@ -14,6 +14,7 @@ import UIKit
 //TODO: When a property is set such as size, I need to refresh the UI (call reset image should do the job)
 //TODO: IBInspectable autorefresh, and add image life
 //TODO: Default background color = clear
+//TODO: Add timer for preview view to hide
 
 @IBDesignable
 public class ZoomViewPW: UIScrollView {
@@ -28,6 +29,10 @@ public class ZoomViewPW: UIScrollView {
         set {
             guard self.bounds.width > 0 && self.bounds.height > 0 else {
                 print("ZoomViewPW Error: Make sure to set bounds to your scrollView, width or height cannot be 0")
+                return
+            }
+            guard newValue.size.width > 0 && newValue.size.height > 0 else {
+                print("ZoomViewPW Error: Image width and height cannot be 0")
                 return
             }
             if imageView != nil {
