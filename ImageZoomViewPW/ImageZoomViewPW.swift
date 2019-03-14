@@ -12,8 +12,6 @@ import UIKit
 //TODO: Write Documentation
 //TODO: Check UIGestureRotation Reoginizer
 //TODO: When a property is set such as size, I need to refresh the UI (call reset image should do the job)
-//TODO: IBInspectable autorefresh, and add image life
-//TODO: Default background color = clear
 //TODO: Add timer for preview view to hide
 
 @IBDesignable
@@ -22,9 +20,9 @@ public class ZoomViewPW: UIScrollView {
     // MARK: Private Attributes
     static private let DefaultBoxSize: CGFloat = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) / 5.0
 
-    private var image: UIImage! {
+    private var _image: UIImage! {
         get {
-            return imageView.image
+            return imageView == nil ? UIImage() : imageView.image ?? UIImage()
         }
         set {
             guard self.bounds.width > 0 && self.bounds.height > 0 else {
@@ -45,26 +43,46 @@ public class ZoomViewPW: UIScrollView {
             imageView.frame = CGRect(origin: CGPoint.zero, size: newValue.size)
             addSubview(imageView)
             initConstraints()
-            setupPreviewImage(image)
+            setupPreviewImage(newValue)
             contentSize = imageView.frame.size
             updateMinZoomScaleForSize(bounds.size)
             updateConstraintsForSize(bounds.size)
         }
     }
+
     private var currentScale: CGFloat = 0.0
     private var imageView: UIImageView!
     private var _mode: Mode = .fit
+    private var _numberOfTapsForResetZoom: Int = 2
     private var _position: Position = .bottomLeft
     private var previewView: UIImageView!
+    private var rotationIncrementInDegree: CGFloat = 90.0
 
     // MARK: IBInspectable Attributes
+    //TODO: Add warning if used to not use in ViewController, use setImageinstead
+    @IBInspectable public var image: UIImage? {
+        get {
+            return _image ?? UIImage()
+        }
+        set {
+            self._image = newValue ?? UIImage()
+        }
+    }
+
     @IBInspectable public var boundingBoxColor: UIColor = .red
     @IBInspectable public var boundingBoxBorderWidth: CGFloat = 2.0
-    private var numberOfTapsForResetZoom: Int = 2 //TODO: Need to reset the gesture
+    @IBInspectable public var numberOfTapsForResetZoom: Int {
+        get {
+            return self._numberOfTapsForResetZoom
+        }
+        set {
+            self._numberOfTapsForResetZoom = newValue > 0 ? newValue : 0
+            self.setTapGesture()
+        }
+    }
     @IBInspectable var numberOfZoomInClicksAllowed: CGFloat = 6.0
     @IBInspectable public var previewViewBackgroundColor: UIColor = .clear
     @IBInspectable public var previewBoxSize: CGSize = CGSize(width: DefaultBoxSize, height: DefaultBoxSize)
-    public var rotationIncrementInDegree: CGFloat = 90.0 //TODO: Limit to multiple of pi/2, for other need to change to logic of the constraints...
     @IBInspectable public var xMargin: CGFloat = 10.0
     @IBInspectable public var yMargin: CGFloat = 10.0
     @IBInspectable public var zoomScaleIncrement: CGFloat = 1.0
@@ -72,7 +90,7 @@ public class ZoomViewPW: UIScrollView {
     @available(*, unavailable, message: "This property is reserved for Interface Builder. Use 'mode' instead.")
     @IBInspectable var mode: String? {
         willSet {
-            if let newMode = Mode(rawValue: newValue?.lowercased() ?? "") {
+            if let newMode = Mode(rawValue: newValue ?? "") {
                 _mode = newMode
             }
         }
@@ -106,11 +124,14 @@ public class ZoomViewPW: UIScrollView {
         case bottomRight = "bottomRight"
     }
 
+    // MARK: GestureRecognizers
+    var _doubleTap: UITapGestureRecognizer!
+
     // MARK: Initializers
     public init(frame: CGRect, image: UIImage) {
         super.init(frame: frame)
         setup()
-        self.image = image
+        self._image = image
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,15 +144,28 @@ public class ZoomViewPW: UIScrollView {
         setup()
     }
 
+    public override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+
+        self._image = image
+    }
+
     private func setup() {
         delegate = self
         bounces = false
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
         clipsToBounds = true
-        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
-        doubleTapGesture.numberOfTapsRequired = numberOfTapsForResetZoom
-        addGestureRecognizer(doubleTapGesture)
+        setTapGesture()
+    }
+
+    private func setTapGesture() {
+        if _doubleTap != nil {
+            removeGestureRecognizer(_doubleTap)
+        }
+        _doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+        _doubleTap.numberOfTapsRequired = _numberOfTapsForResetZoom
+        addGestureRecognizer(_doubleTap)
     }
 
     @objc private func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -154,15 +188,20 @@ public class ZoomViewPW: UIScrollView {
     }
 
     public func resetImage() {
-        self.image = imageView.image
+        self._image = imageView == nil ? UIImage() : imageView.image ?? UIImage()
     }
 
     public func rotate() {
-        image = imageRotatedByDegrees(oldImage: image, deg: rotationIncrementInDegree)
+        self._image = imageRotatedByDegrees(oldImage: self._image, deg: rotationIncrementInDegree)
     }
 
     public func setImage(_ image: UIImage) {
-        self.image = image
+        self._image = image
+    }
+
+    // In case some UI issues occure while using the interface builder
+    public func refresh() {
+        resetImage()
     }
 }
 
@@ -363,7 +402,9 @@ extension ZoomViewPW {
 
         //Create the bitmap context
         UIGraphicsBeginImageContext(rotatedSize)
-        let bitmap: CGContext = UIGraphicsGetCurrentContext()!
+        guard let bitmap: CGContext = UIGraphicsGetCurrentContext() else {
+            return UIImage()
+        }
 
         //Move the origin to the middle of the image so we will rotate and scale around the center.
         bitmap.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
@@ -377,7 +418,9 @@ extension ZoomViewPW {
                                                   y: -oldImage.size.height / 2,
                                                   width: oldImage.size.width,
                                                   height: oldImage.size.height))
-        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        guard let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            return UIImage()
+        }
         UIGraphicsEndImageContext()
         return newImage
     }
