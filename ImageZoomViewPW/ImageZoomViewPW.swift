@@ -47,6 +47,7 @@ public class ZoomViewPW: UIScrollView {
             contentSize = imageView.frame.size
             updateMinZoomScaleForSize(bounds.size)
             updateConstraintsForSize(bounds.size)
+            updateConstraintsIfNeeded()
         }
     }
 
