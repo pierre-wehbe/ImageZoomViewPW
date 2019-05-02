@@ -58,6 +58,9 @@ override func viewDidLoad() {
 }
 ```
 
+## Demo
+![ImageZoomViewDemo](https://github.com/pierre-wehbe/ImageZoomViewPW/blob/master/Demo/ImageZoomViewDemo.gif)
+
 ## Contribute
 Contributions are highly appreciated! To submit one:
 1. Fork
